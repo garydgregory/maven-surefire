@@ -36,6 +36,10 @@ import java.util.List;
  */
 public final class SurefireLauncher
 {
+    public static final String EXT_JDK_HOME_KEY = "jdk.home";
+
+    public static final String EXT_JDK_HOME = System.getProperty( EXT_JDK_HOME_KEY );
+
     private final MavenLauncher mavenLauncher;
 
     private final String surefireVersion = System.getProperty( "surefire.version" );
@@ -66,9 +70,9 @@ public final class SurefireLauncher
         setInProcessJavaHome();
     }
 
-    public SurefireLauncher setInProcessJavaHome()
+    private void setInProcessJavaHome()
     {
-        String javaHome = System.getenv( "JAVA_HOME" );
+        String javaHome = EXT_JDK_HOME == null ? System.getenv( "JAVA_HOME" ) : EXT_JDK_HOME;
         if ( javaHome != null && !javaHome.isEmpty() )
         {
             try
@@ -84,7 +88,6 @@ public final class SurefireLauncher
                 throw new RuntimeException( e );
             }
         }
-        return this;
     }
 
     public SurefireLauncher setLauncherJavaHome( String javaHome )
